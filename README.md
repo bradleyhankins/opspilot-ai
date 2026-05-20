@@ -50,3 +50,7 @@ The dashboard helps users:
 ### Weekly Sales Meeting Agenda
 
 ![OpsPilot AI Weekly Sales Meeting Agenda](screenshots/weekly-sales-agenda.png)
+
+## Live Demo
+
+[Launch OpsPilot AI](https://opspilot-ai-gyywegvqlyuavvanh6dnwq.streamlit.app/)
