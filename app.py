@@ -296,6 +296,21 @@ lead source analysis, coaching priorities, and manager-ready action plans.
 # -----------------------------
 # Data loading
 # -----------------------------
+st.header("Upload Sales Activity Data")
+
+st.markdown("""
+Use the sample data to explore the dashboard, or upload your own CSV file using the required format.
+""")
+
+with open("sample_data.csv", "r") as file:
+    sample_csv = file.read()
+
+st.download_button(
+    label="Download Sample CSV Template",
+    data=sample_csv,
+    file_name="opspilot-sample-data.csv",
+    mime="text/csv"
+)
 
 uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
@@ -627,6 +642,26 @@ st.download_button(
     mime="text/markdown"
 )
 
+with st.expander("How to use OpsPilot AI"):
+    st.markdown("""
+    1. Download the sample CSV template.
+    2. Replace the sample rows with your own sales activity data.
+    3. Upload the completed CSV file.
+    4. Use the sidebar filters to analyze reps, lead sources, and date ranges.
+    5. Review the KPI dashboard, AI Operations Diagnosis, Manager Brief, and Weekly Sales Meeting Agenda.
+    6. Download the Manager Report for use in meetings or coaching sessions.
+
+    Required CSV columns:
+
+    - Date
+    - Rep
+    - Lead Source
+    - Leads Issued
+    - Demos
+    - Sales
+    - Revenue
+    """)
+    
 # -----------------------------
 # Raw data
 # -----------------------------
