@@ -6,6 +6,20 @@ OpsPilot AI is an operations intelligence dashboard for field-sales and home-ser
 
 Small and mid-sized businesses often rely on scattered spreadsheets, CRM exports, daily reports, and manager notes to make operational decisions. OpsPilot AI gives operators a simple way to identify what is working, what needs attention, and what actions should happen next.
 
+## Project Impact
+
+OpsPilot AI was built to solve a common operations problem in field-sales and home-service businesses: managers often have activity data, but not a clear action plan.
+
+This dashboard converts raw sales activity into usable operational intelligence, helping leaders quickly identify:
+
+- Which reps are producing
+- Which lead sources are worth protecting
+- Where sales execution is breaking down
+- What coaching conversations need to happen next
+- What should be discussed in the next sales meeting
+
+The goal is to help small and mid-sized businesses make faster, cleaner, data-driven decisions without needing enterprise-level RevOps software.
+
 ## Who this helps
 
 OpsPilot AI is designed for:
