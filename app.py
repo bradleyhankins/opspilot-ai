@@ -337,6 +337,19 @@ df["Revenue"] = clean_currency_column(df["Revenue"])
 # Sidebar filters
 # -----------------------------
 
+st.sidebar.title("OpsPilot AI")
+st.sidebar.caption("Version 1.0 MVP")
+
+st.sidebar.markdown("""
+**Built by Bradley Hankins**
+
+OpsPilot AI is a practical operations intelligence tool for field-sales and home-service teams.
+
+It helps managers turn daily activity data into KPI visibility, coaching priorities, and manager-ready action plans.
+""")
+
+st.sidebar.divider()
+
 st.sidebar.header("Filters")
 
 rep_options = sorted(df["Rep"].dropna().unique())
@@ -661,10 +674,37 @@ with st.expander("How to use OpsPilot AI"):
     - Sales
     - Revenue
     """)
-    
+
+st.info(
+    "Privacy note: Uploaded CSV files are processed during the active app session and are not saved by this app."
+)
+
 # -----------------------------
 # Raw data
 # -----------------------------
+
+# -----------------------------
+# Consulting / Portfolio CTA
+# -----------------------------
+
+st.header("Built for Practical AI Operations Consulting")
+
+st.markdown("""
+OpsPilot AI is an example of how small and mid-sized businesses can use lightweight AI-assisted workflows
+to improve visibility, coaching, reporting, and operational decision-making without needing enterprise-level software.
+
+This project demonstrates:
+
+- Sales operations analysis
+- KPI dashboarding
+- Workflow automation
+- Manager reporting
+- AI-style operational diagnosis
+- Field-sales coaching support
+- Practical business intelligence for home-service teams
+
+Built by **Bradley Hankins** as part of an AI operations and workflow automation portfolio.
+""")
 
 with st.expander("View Raw Data"):
     st.dataframe(filtered_df, use_container_width=True, hide_index=True)
