@@ -43,6 +43,7 @@ The dashboard helps users:
 - Create a manager-ready brief
 - Build a weekly sales meeting agenda
 - Generate an AI-style operations diagnosis that identifies the primary bottleneck, likely cause, manager action, coaching move, and roleplay scenario
+- Export a downloadable manager report with KPIs, AI-style diagnosis, coaching recommendations, and weekly meeting focus
 
 ## Screenshots
 
@@ -73,6 +74,10 @@ The dashboard helps users:
 ## Live Demo
 
 [Launch OpsPilot AI](https://opspilot-ai-gyywegvqlyuavvanh6dnwq.streamlit.app/)
+
+### Download Manager Report
+
+![OpsPilot AI Download Manager Report](screenshots/download-manager-report.png)
 
 ## Tech Stack
 
@@ -117,3 +122,20 @@ The diagnosis engine identifies:
 - Lead source needing review
 
 This allows managers to move beyond static reporting and quickly understand what action should happen next.
+
+## Downloadable Manager Report
+
+OpsPilot AI allows users to export a Markdown manager report based on the current dashboard filters.
+
+The report includes:
+
+- Executive summary
+- Core KPIs
+- AI operations diagnosis
+- Likely cause
+- Recommended manager action
+- Coaching move
+- Suggested roleplay
+- Weekly sales meeting focus
+
+This makes the dashboard useful beyond live viewing by giving managers a clean document they can save, share, or use during meetings.
