@@ -66,6 +66,133 @@ def format_summary_table(df):
             formatted[col] = formatted[col].apply(pct)
     return formatted
 
+def generate_operations_diagnosis(demo_rate, close_rate, avg_sale, nsli, rep_summary, source_summary):
+    """
+    Generates a rules-based AI-style operations diagnosis.
+
+    This keeps the app free and deployable without requiring an API key,
+    while still translating sales data into practical manager actions.
+    """
+
+    diagnosis = {
+        "primary_bottleneck": "",
+        "likely_cause": "",
+        "manager_action": "",
+        "coaching_move": "",
+        "roleplay": "",
+        "priority_level": ""
+    }
+
+    if demo_rate < 0.60:
+        diagnosis["primary_bottleneck"] = "Demo Rate"
+        diagnosis["priority_level"] = "High"
+        diagnosis["likely_cause"] = (
+            "The team is not converting enough issued leads into completed demos. "
+            "This usually points to weak appointment setting, poor confirmation process, "
+            "low homeowner commitment, bad lead quality, or scheduling friction."
+        )
+        diagnosis["manager_action"] = (
+            "Review the most recent issued leads that did not demo. Look for patterns by rep, "
+            "lead source, appointment time, and confirmation process."
+        )
+        diagnosis["coaching_move"] = (
+            "Coach reps on setting stronger expectations, confirming all decision-makers, "
+            "building urgency before the appointment, and reducing no-show risk."
+        )
+        diagnosis["roleplay"] = (
+            "Homeowner says: 'Just come out and give me a quick quote. I may not have much time.'"
+        )
+
+    elif close_rate < 0.35:
+        diagnosis["primary_bottleneck"] = "Close Rate"
+        diagnosis["priority_level"] = "High"
+        diagnosis["likely_cause"] = (
+            "The team is getting enough demos, but not converting enough of them into sales. "
+            "This usually points to weak discovery, poor value build, price resistance, "
+            "lack of urgency, or inconsistent closing confidence."
+        )
+        diagnosis["manager_action"] = (
+            "Review the last several unsold demos and identify the most common objection. "
+            "Use that pattern to build the next sales meeting around one specific closing skill."
+        )
+        diagnosis["coaching_move"] = (
+            "Coach reps on deeper discovery, stronger problem awareness, financing confidence, "
+            "value stacking, and direct same-day closing language."
+        )
+        diagnosis["roleplay"] = (
+            "Homeowner says: 'We need to think about it and get a few more quotes.'"
+        )
+
+    elif avg_sale < 12000:
+        diagnosis["primary_bottleneck"] = "Average Sale"
+        diagnosis["priority_level"] = "Medium"
+        diagnosis["likely_cause"] = (
+            "The team is closing deals, but project size is lower than expected. "
+            "This may indicate incomplete scopes, weak upgrade positioning, missed add-ons, "
+            "or reps defaulting to the cheapest option."
+        )
+        diagnosis["manager_action"] = (
+            "Audit recent sold jobs and compare the presented scope against the full opportunity. "
+            "Look for missed upgrades, accessories, financing options, and scope completeness."
+        )
+        diagnosis["coaching_move"] = (
+            "Coach reps on presenting good/better/best options, explaining long-term value, "
+            "and confidently offering add-ons where they solve a real customer problem."
+        )
+        diagnosis["roleplay"] = (
+            "Homeowner says: 'We just want the cheapest option that gets the job done.'"
+        )
+
+    elif nsli < 4000:
+        diagnosis["primary_bottleneck"] = "Net Sales Per Lead Issued"
+        diagnosis["priority_level"] = "Medium"
+        diagnosis["likely_cause"] = (
+            "The total revenue produced per issued lead is low. This can come from weak lead quality, "
+            "poor rep assignment, low demo rate, low close rate, or smaller-than-expected job sizes."
+        )
+        diagnosis["manager_action"] = (
+            "Compare NSLI by lead source and by rep. Shift attention toward the best-performing "
+            "source and review whether low-performing sources need better qualification."
+        )
+        diagnosis["coaching_move"] = (
+            "Coach the team on prioritizing high-intent opportunities, improving follow-up speed, "
+            "and increasing conversion discipline on every issued lead."
+        )
+        diagnosis["roleplay"] = (
+            "Homeowner says: 'I’m not sure if this is something we’re ready to do right now.'"
+        )
+
+    else:
+        diagnosis["primary_bottleneck"] = "No Critical Bottleneck"
+        diagnosis["priority_level"] = "Healthy"
+        diagnosis["likely_cause"] = (
+            "The current metrics are within a healthy operating range. The team appears to be generating demos, "
+            "closing opportunities, and producing meaningful revenue per lead."
+        )
+        diagnosis["manager_action"] = (
+            "Protect what is working. Study the top-performing rep and lead source, then document the behaviors "
+            "that should become the team standard."
+        )
+        diagnosis["coaching_move"] = (
+            "Use coaching time to reinforce winning behaviors, sharpen advanced objection handling, "
+            "and build consistency across the team."
+        )
+        diagnosis["roleplay"] = (
+            "Homeowner says: 'Everything sounds good, but I want to make sure we are making the right decision.'"
+        )
+
+    best_rep = rep_summary.sort_values("Revenue", ascending=False).iloc[0]
+    weakest_rep = rep_summary.sort_values("NSLI", ascending=True).iloc[0]
+    best_source = source_summary.sort_values("NSLI", ascending=False).iloc[0]
+    weakest_source = source_summary.sort_values("NSLI", ascending=True).iloc[0]
+
+    diagnosis["best_rep"] = best_rep["Rep"]
+    diagnosis["weakest_rep"] = weakest_rep["Rep"]
+    diagnosis["best_source"] = best_source["Lead Source"]
+    diagnosis["weakest_source"] = weakest_source["Lead Source"]
+
+    return diagnosis
+
 # -----------------------------
 # Header
 # -----------------------------
@@ -262,6 +389,50 @@ if coaching_notes:
         st.markdown(f"- {note}")
 else:
     st.success("No major coaching flags found in the current filtered data.")
+
+# -----------------------------
+# AI Operations Diagnosis
+# -----------------------------
+
+st.header("AI Operations Diagnosis")
+
+diagnosis = generate_operations_diagnosis(
+    demo_rate,
+    close_rate,
+    avg_sale,
+    nsli,
+    rep_summary,
+    source_summary
+)
+
+diag_col1, diag_col2, diag_col3 = st.columns(3)
+
+diag_col1.metric("Primary Bottleneck", diagnosis["primary_bottleneck"])
+diag_col2.metric("Priority Level", diagnosis["priority_level"])
+diag_col3.metric("Rep to Review", diagnosis["weakest_rep"])
+
+st.markdown(f"""
+### Diagnosis
+
+**Likely Cause:**  
+{diagnosis["likely_cause"]}
+
+**Recommended Manager Action:**  
+{diagnosis["manager_action"]}
+
+**Recommended Coaching Move:**  
+{diagnosis["coaching_move"]}
+
+**Suggested Sales Meeting Roleplay:**  
+_{diagnosis["roleplay"]}_
+
+### Pattern Recognition
+
+- Strongest revenue producer: **{diagnosis["best_rep"]}**
+- Rep needing review by NSLI: **{diagnosis["weakest_rep"]}**
+- Strongest lead source: **{diagnosis["best_source"]}**
+- Lead source needing review: **{diagnosis["weakest_source"]}**
+""")
 
 # -----------------------------
 # Manager Brief
