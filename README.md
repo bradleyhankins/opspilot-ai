@@ -110,31 +110,31 @@ OpsPilot AI generates manager-ready outputs, including:
 
 ### KPI Dashboard
 
-![OpsPilot AI KPI Dashboard](screenshots/dashboard-kpis.png)
+![OpsPilot AI KPI Dashboard](screenshots/dashboard-kpis.svg)
 
 ### Rep Performance
 
-![OpsPilot AI Rep Performance](screenshots/rep-performance.png)
+![OpsPilot AI Rep Performance](screenshots/rep-performance.svg)
 
 ### Lead Source Performance
 
-![OpsPilot AI Lead Source Performance](screenshots/lead-source-performance.png)
+![OpsPilot AI Lead Source Performance](screenshots/lead-source-performance.svg)
 
 ### Manager Brief
 
-![OpsPilot AI Manager Brief](screenshots/manager-brief.png)
+![OpsPilot AI Manager Brief](screenshots/manager-brief.svg)
 
 ### Weekly Sales Meeting Agenda
 
-![OpsPilot AI Weekly Sales Meeting Agenda](screenshots/weekly-sales-agenda.png)
+![OpsPilot AI Weekly Sales Meeting Agenda](screenshots/weekly-sales-agenda.svg)
 
 ### AI Operations Diagnosis
 
-![OpsPilot AI Operations Diagnosis](screenshots/ai-operations-diagnosis.png)
+![OpsPilot AI Operations Diagnosis](screenshots/ai-operations-diagnosis.svg)
 
 ### Download Manager Report
 
-![OpsPilot AI Download Manager Report](screenshots/download-manager-report.png)
+![OpsPilot AI Download Manager Report](screenshots/download-manager-report.svg)
 
 ## Tech Stack
 
