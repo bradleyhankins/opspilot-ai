@@ -1,22 +1,14 @@
 # OpsPilot AI
 
-OpsPilot AI is an operations intelligence dashboard for field-sales and home-service teams. It converts daily sales activity into KPI reporting, rep performance insights, lead source analysis, coaching opportunities, and manager-ready action plans.
+OpsPilot AI is an operations intelligence dashboard for field-sales and home-service teams. It converts daily sales activity into KPI reporting, rep performance insights, lead source analysis, trend visibility, coaching priorities, and manager-ready action plans.
+
+## Live Demo
+
+[Launch OpsPilot AI](https://opspilot-ai.streamlit.app/)
 
 ## Why this project exists
 
 Small and mid-sized businesses often rely on scattered spreadsheets, CRM exports, daily reports, and manager notes to make operational decisions. OpsPilot AI gives operators a simple way to identify what is working, what needs attention, and what actions should happen next.
-
-## Project Impact
-
-OpsPilot AI was built to solve a common operations problem in field-sales and home-service businesses: managers often have activity data, but not a clear action plan.
-
-This dashboard converts raw sales activity into usable operational intelligence, helping leaders quickly identify:
-
-- Which reps are producing
-- Which lead sources are worth protecting
-- Where sales execution is breaking down
-- What coaching conversations need to happen next
-- What should be discussed in the next sales meeting
 
 The goal is to help small and mid-sized businesses make faster, cleaner, data-driven decisions without needing enterprise-level RevOps software.
 
@@ -26,24 +18,93 @@ OpsPilot AI is designed for:
 
 - Home-service companies
 - Field-sales teams
-- Roofing, siding, gutter, HVAC, pest, and exterior remodeling businesses
 - Sales managers and operations leaders
-- Small business owners who need better visibility without enterprise software
+- Small business owners who need better visibility
+- Teams that manage leads, demos, sales activity, revenue, and follow-up performance
 
-## What it does
+## Current Version: v2.2
 
-The dashboard helps users:
+OpsPilot AI v2.2 includes:
 
-- Upload daily sales activity data
-- Track leads issued, demos, sales, revenue, close rate, demo rate, average sale, and NSLI
-- Compare rep performance
-- Compare lead source quality
-- Identify operational health risks
-- Generate coaching opportunities
-- Create a manager-ready brief
-- Build a weekly sales meeting agenda
-- Generate an AI-style operations diagnosis that identifies the primary bottleneck, likely cause, manager action, coaching move, and roleplay scenario
-- Export a downloadable manager report with KPIs, AI-style diagnosis, coaching recommendations, and weekly meeting focus
+- Editable sample CSV download
+- Public-safe fictional sample data
+- CSV upload workflow
+- Data readiness check
+- Adjustable KPI targets
+- Executive KPI snapshot
+- Operational health grading
+- Trend charts by date
+- Rep performance analysis
+- Lead source performance analysis
+- AI-style operations diagnosis
+- Top 3 manager priorities
+- Rep coaching cards
+- Manager brief
+- Weekly sales meeting agenda
+- Downloadable manager report
+- Downloadable filtered data CSV
+
+## What it analyzes
+
+The dashboard calculates and evaluates:
+
+- Leads issued
+- Demos
+- Sales
+- Revenue
+- Demo rate
+- Close rate
+- Average sale
+- Net sales per lead issued (NSLI)
+- Rep performance
+- Lead source performance
+- Performance trends over time
+- Coaching opportunities
+- Manager action priorities
+
+## Required CSV Format
+
+Users can download the editable sample CSV, replace the fictional data with their own activity data, and re-upload it.
+
+Required columns:
+
+```csv
+Date,Rep,Lead Source,Leads Issued,Demos,Sales,Revenue
+```
+
+Example row:
+
+```csv
+2026-01-05,Alex Carter,Website,10,7,3,42000
+```
+
+## AI Operations Diagnosis
+
+OpsPilot AI includes a rules-based AI-style diagnosis engine that translates KPI performance into practical management recommendations.
+
+The diagnosis engine identifies:
+
+- Primary operational bottleneck
+- Priority level
+- Likely cause
+- Recommended manager action
+- Recommended coaching move
+- Suggested sales meeting roleplay
+- Strongest rep
+- Rep needing review
+- Strongest lead source
+- Lead source needing review
+
+## Manager Outputs
+
+OpsPilot AI generates manager-ready outputs, including:
+
+- Top 3 manager priorities
+- Rep coaching cards
+- Executive manager brief
+- Weekly sales meeting agenda
+- Downloadable Markdown manager report
+- Filtered CSV export based on current dashboard filters
 
 ## Screenshots
 
@@ -71,10 +132,6 @@ The dashboard helps users:
 
 ![OpsPilot AI Operations Diagnosis](screenshots/ai-operations-diagnosis.png)
 
-## Live Demo
-
-[Launch OpsPilot AI](https://opspilot-ai-gyywegvqlyuavvanh6dnwq.streamlit.app/)
-
 ### Download Manager Report
 
 ![OpsPilot AI Download Manager Report](screenshots/download-manager-report.png)
@@ -85,57 +142,15 @@ The dashboard helps users:
 - Streamlit
 - Pandas
 - GitHub
-- CSV-based data workflow
+- Streamlit Community Cloud
+- CSV-based workflow
+- Markdown report export
 
-## Core Business Logic
+## Public Demo Note
 
-OpsPilot AI calculates and analyzes:
+All sample data, names, companies, and scenarios used in this project are fictional and created for public portfolio demonstration purposes.
 
-- Leads issued
-- Demos
-- Sales
-- Revenue
-- Demo rate
-- Close rate
-- Average sale
-- Net sales per lead issued
-- Rep performance
-- Lead source performance
-- Coaching opportunities
-- Manager action plans
+## Built By
 
-## AI Operations Diagnosis
-
-OpsPilot AI includes a rules-based AI-style diagnosis engine that translates KPI performance into practical management recommendations.
-
-The diagnosis engine identifies:
-
-- Primary operational bottleneck
-- Priority level
-- Likely cause
-- Recommended manager action
-- Recommended coaching move
-- Suggested sales meeting roleplay
-- Strongest rep
-- Rep needing review
-- Strongest lead source
-- Lead source needing review
-
-This allows managers to move beyond static reporting and quickly understand what action should happen next.
-
-## Downloadable Manager Report
-
-OpsPilot AI allows users to export a Markdown manager report based on the current dashboard filters.
-
-The report includes:
-
-- Executive summary
-- Core KPIs
-- AI operations diagnosis
-- Likely cause
-- Recommended manager action
-- Coaching move
-- Suggested roleplay
-- Weekly sales meeting focus
-
-This makes the dashboard useful beyond live viewing by giving managers a clean document they can save, share, or use during meetings.
+Bradley Hankins  
+Operations & Revenue Leader | AI Workflow Automation | RevOps & Process Improvement
