@@ -22,18 +22,21 @@ OpsPilot AI is designed for:
 - Small business owners who need better visibility
 - Teams that manage leads, demos, sales activity, revenue, and follow-up performance
 
-## Current Version: v2.2
+## Current Version: v2.3
 
-OpsPilot AI v2.2 includes:
+OpsPilot AI v2.3 includes:
 
 - Editable sample CSV download
 - Public-safe fictional sample data
 - CSV upload workflow
 - Data readiness check
 - Adjustable KPI targets
+- Executive Summary Scorecard
+- Operational health status
+- Primary bottleneck detection
+- Best manager move recommendation
+- Period-over-period trend comparison
 - Executive KPI snapshot
-- Operational health grading
-- Trend charts by date
 - Rep performance analysis
 - Lead source performance analysis
 - AI-style operations diagnosis
@@ -82,6 +85,7 @@ Example row:
 
 OpsPilot AI generates manager-ready outputs, including:
 
+- Executive summary scorecard
 - Top 3 manager priorities
 - Rep coaching cards
 - Executive manager brief
@@ -94,40 +98,16 @@ OpsPilot AI generates manager-ready outputs, including:
 1. Launch the live demo.
 2. Download the sample CSV from the app.
 3. Re-upload the sample CSV or use the built-in sample workflow.
-4. Review the KPI snapshot, operational health grade, and trend charts.
+4. Review the executive scorecard, KPI snapshot, operational health grade, and trend comparison.
 5. Review rep performance and lead source performance.
 6. Review the AI-style operations diagnosis and manager priorities.
 7. Download the manager report.
 
 ## Screenshots
 
-### KPI Dashboard
+### Executive Scorecard and KPI Snapshot
 
-![OpsPilot AI KPI Dashboard](screenshots/dashboard-kpis.svg)
-
-### Rep Performance
-
-![OpsPilot AI Rep Performance](screenshots/rep-performance.svg)
-
-### Lead Source Performance
-
-![OpsPilot AI Lead Source Performance](screenshots/lead-source-performance.svg)
-
-### Manager Brief
-
-![OpsPilot AI Manager Brief](screenshots/manager-brief.svg)
-
-### Weekly Sales Meeting Agenda
-
-![OpsPilot AI Weekly Sales Meeting Agenda](screenshots/weekly-sales-agenda.svg)
-
-### AI Operations Diagnosis
-
-![OpsPilot AI Operations Diagnosis](screenshots/ai-operations-diagnosis.svg)
-
-### Download Manager Report
-
-![OpsPilot AI Download Manager Report](screenshots/download-manager-report.svg)
+![OpsPilot AI Executive Scorecard](screenshots/executive-scorecard.svg)
 
 ## Tech Stack
 
