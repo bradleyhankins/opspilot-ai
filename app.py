@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------------------------------
-# Constants
+# App constants
 # -----------------------------------------------------------------------------
 
 REQUIRED_COLUMNS = [
@@ -25,12 +25,22 @@ REQUIRED_COLUMNS = [
     "Revenue",
 ]
 
-SAMPLE_TEMPLATE = """Date,Rep,Lead Source,Leads Issued,Demos,Sales,Revenue
-2026-01-01,Alex Carter,Website,10,7,3,42000
-2026-01-01,Jordan Lee,Referral,8,6,3,39000
-2026-01-02,Taylor Brooks,Canvassing,12,6,2,24000
-2026-01-02,Alex Carter,Partner Lead,6,5,2,30000
-2026-01-03,Jordan Lee,Website,9,7,2,28000
+EDITABLE_SAMPLE_CSV = """Date,Rep,Lead Source,Leads Issued,Demos,Sales,Revenue
+2026-01-05,Alex Carter,Website,10,7,3,42000
+2026-01-05,Jordan Lee,Referral,8,6,3,39000
+2026-01-06,Taylor Brooks,Canvassing,12,6,2,24000
+2026-01-06,Morgan Reed,Partner Lead,6,5,2,30000
+2026-01-07,Casey Nguyen,Website,9,7,2,28000
+2026-01-07,Alex Carter,Referral,7,6,3,45000
+2026-01-08,Jordan Lee,Canvassing,11,6,2,26000
+2026-01-08,Taylor Brooks,Paid Search,6,3,1,13500
+2026-01-09,Morgan Reed,Website,8,6,2,31000
+2026-01-09,Casey Nguyen,Event,5,3,1,14500
+2026-01-10,Alex Carter,Partner Lead,5,5,2,33500
+2026-01-10,Jordan Lee,Website,9,7,3,41000
+2026-01-11,Taylor Brooks,Referral,6,5,2,29500
+2026-01-11,Morgan Reed,Canvassing,10,5,1,15500
+2026-01-12,Casey Nguyen,Paid Search,7,4,1,16000
 """
 
 # -----------------------------------------------------------------------------
@@ -46,13 +56,27 @@ st.markdown(
         padding-bottom: 3rem;
     }
 
+    [data-testid="stSidebar"] {
+        background: #111827;
+    }
+
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] label {
+        color: #f9fafb !important;
+    }
+
     .hero {
-        padding: 1.8rem 2rem;
+        padding: 1.9rem 2rem;
         border-radius: 20px;
-        background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #334155 100%);
+        background: linear-gradient(135deg, #111827 0%, #1f2937 52%, #334155 100%);
         color: #ffffff;
         box-shadow: 0 18px 36px rgba(17,24,39,.18);
         margin-bottom: 1rem;
+        border: 1px solid rgba(255,255,255,.08);
     }
 
     .eyebrow {
@@ -65,17 +89,29 @@ st.markdown(
     }
 
     .hero-title {
-        font-size: 2.2rem;
-        line-height: 1.1;
+        font-size: 2.25rem;
+        line-height: 1.08;
         font-weight: 850;
         margin-bottom: .65rem;
     }
 
     .hero-subtitle {
         font-size: 1.02rem;
-        line-height: 1.6;
+        line-height: 1.62;
         color: #e5e7eb;
         max-width: 900px;
+    }
+
+    .hero-pills span {
+        display: inline-block;
+        padding: .35rem .65rem;
+        margin: .75rem .28rem 0 0;
+        border-radius: 999px;
+        background: rgba(255,255,255,.10);
+        border: 1px solid rgba(255,255,255,.16);
+        font-weight: 700;
+        font-size: .78rem;
+        color: #f8fafc;
     }
 
     .section-title {
@@ -90,13 +126,14 @@ st.markdown(
         color: #4b5563;
         line-height: 1.6;
         margin-bottom: 1rem;
-        max-width: 940px;
+        max-width: 950px;
     }
 
     .kpi-card,
-    .insight-card,
     .brief-card,
-    .risk-card {
+    .risk-card,
+    .info-card,
+    .upload-card {
         background: #ffffff;
         border: 1px solid #e5e7eb;
         border-radius: 18px;
@@ -109,6 +146,7 @@ st.markdown(
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        margin-bottom: .75rem;
     }
 
     .kpi-label {
@@ -122,8 +160,8 @@ st.markdown(
 
     .kpi-value {
         color: #111827;
-        font-size: 1.55rem;
-        line-height: 1.15;
+        font-size: 1.52rem;
+        line-height: 1.16;
         font-weight: 900;
         overflow-wrap: break-word;
     }
@@ -135,14 +173,24 @@ st.markdown(
         line-height: 1.35;
     }
 
-    .insight-card,
+    .upload-card,
+    .info-card,
     .brief-card,
     .risk-card {
         padding: 1.15rem;
         margin-bottom: .8rem;
     }
 
-    .insight-card h3,
+    .upload-card {
+        border-left: 5px solid #1d4ed8;
+    }
+
+    .brief-card {
+        border-left: 5px solid #111827;
+    }
+
+    .upload-card h3,
+    .info-card h3,
     .brief-card h3,
     .risk-card h3 {
         font-size: 1.05rem;
@@ -151,11 +199,13 @@ st.markdown(
         margin-bottom: .4rem;
     }
 
-    .insight-card p,
+    .upload-card p,
+    .upload-card li,
+    .info-card p,
+    .info-card li,
     .brief-card p,
-    .risk-card p,
-    .insight-card li,
     .brief-card li,
+    .risk-card p,
     .risk-card li {
         color: #4b5563;
         line-height: 1.52;
@@ -226,11 +276,11 @@ def load_data(uploaded_file) -> pd.DataFrame:
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
     else:
+        from io import StringIO
         try:
             df = pd.read_csv("sample_data.csv")
         except FileNotFoundError:
-            from io import StringIO
-            df = pd.read_csv(StringIO(SAMPLE_TEMPLATE))
+            df = pd.read_csv(StringIO(EDITABLE_SAMPLE_CSV))
 
     missing = [column for column in REQUIRED_COLUMNS if column not in df.columns]
     if missing:
@@ -244,7 +294,13 @@ def load_data(uploaded_file) -> pd.DataFrame:
         df[column] = pd.to_numeric(df[column], errors="coerce").fillna(0)
 
     df["Revenue"] = clean_currency_column(df["Revenue"])
-    return df.dropna(subset=["Date"])
+    df = df.dropna(subset=["Date"])
+
+    if df.empty:
+        st.error("The uploaded file did not contain usable dated rows after cleanup.")
+        st.stop()
+
+    return df
 
 
 def build_summary(df: pd.DataFrame, group_col: str) -> pd.DataFrame:
@@ -316,12 +372,8 @@ def generate_diagnosis(metrics: dict, targets: dict, rep_summary: pd.DataFrame, 
         ("NSLI", metrics["nsli"], targets["nsli"]),
     ]
 
-    gaps = []
-    for name, value, target in checks:
-        gap = safe_divide(target - value, target)
-        gaps.append((name, gap, value, target))
-
-    primary_name, primary_gap, primary_value, primary_target = max(gaps, key=lambda item: item[1])
+    gaps = [(name, safe_divide(target - value, target), value, target) for name, value, target in checks]
+    primary_name, primary_gap, _, _ = max(gaps, key=lambda item: item[1])
 
     best_rep = rep_summary.sort_values("Revenue", ascending=False).iloc[0]
     review_rep = rep_summary.sort_values("NSLI", ascending=True).iloc[0]
@@ -333,31 +385,31 @@ def generate_diagnosis(metrics: dict, targets: dict, rep_summary: pd.DataFrame, 
         likely_cause = "The selected data is meeting the configured targets. The main opportunity is to protect what is working and standardize the behaviors behind the strongest results."
         manager_action = "Study the top rep and strongest lead source, then document the process that should become the team standard."
         coaching_move = "Use coaching time for advanced skill sharpening rather than basic correction."
-        roleplay = "Homeowner says: 'Everything sounds good, but I want to make sure we are making the right decision.'"
+        roleplay = "Customer says: 'Everything sounds good, but I want to make sure we are making the right decision.'"
     elif primary_name == "Demo Rate":
         priority = "High" if primary_gap > 0.15 else "Medium"
-        likely_cause = "The team is not converting enough issued leads into completed demos. This may point to weak appointment setting, poor confirmation, low homeowner commitment, scheduling friction, or lead quality issues."
+        likely_cause = "The team is not converting enough issued leads into completed demos. This may point to weak appointment setting, poor confirmation, low customer commitment, scheduling friction, or lead quality issues."
         manager_action = "Review issued leads that did not demo. Look for patterns by rep, lead source, appointment window, and confirmation process."
         coaching_move = "Coach reps on expectation setting, decision-maker confirmation, urgency, and reducing no-show risk."
-        roleplay = "Homeowner says: 'Just come out and give me a quick quote. I may not have much time.'"
+        roleplay = "Customer says: 'Just come out and give me a quick quote. I may not have much time.'"
     elif primary_name == "Close Rate":
         priority = "High" if primary_gap > 0.15 else "Medium"
         likely_cause = "The team is getting demos but not converting enough into sales. This may point to weak discovery, poor value build, price resistance, lack of urgency, or inconsistent closing language."
         manager_action = "Review recent unsold demos and identify the most common objection. Build the next meeting around that single closing skill."
         coaching_move = "Coach reps on discovery, value stacking, financing confidence, urgency, and direct commitment language."
-        roleplay = "Homeowner says: 'We need to think about it and get a few more quotes.'"
+        roleplay = "Customer says: 'We need to think about it and get a few more quotes.'"
     elif primary_name == "Average Sale":
         priority = "Medium"
         likely_cause = "The team is closing work, but project size is below target. This may indicate incomplete scopes, weak upgrade positioning, missed add-ons, or reps defaulting to the lowest option."
         manager_action = "Audit recent sold jobs and compare the presented scope against the full opportunity. Look for missed upgrades, add-ons, and scope completeness."
         coaching_move = "Coach reps on good/better/best options, long-term value, and add-ons that solve real customer problems."
-        roleplay = "Homeowner says: 'We just want the cheapest option that gets the job done.'"
+        roleplay = "Customer says: 'We just want the cheapest option that gets the job done.'"
     else:
         priority = "Medium"
         likely_cause = "Revenue per issued lead is below target. This may come from lead quality, rep assignment, low demo rate, low close rate, or smaller job size."
         manager_action = "Compare NSLI by rep and lead source. Shift attention toward the best-performing source and review whether low-performing sources need better qualification."
         coaching_move = "Coach the team on prioritizing high-intent opportunities, follow-up speed, and conversion discipline on every issued lead."
-        roleplay = "Homeowner says: 'I’m not sure if this is something we’re ready to do right now.'"
+        roleplay = "Customer says: 'I’m not sure if this is something we’re ready to do right now.'"
 
     return {
         "primary_bottleneck": primary_name if primary_gap > 0 else "No Critical Bottleneck",
@@ -439,7 +491,7 @@ Generated by OpsPilot AI.
 
 with st.sidebar:
     st.title("OpsPilot AI")
-    st.caption("Version 2.0")
+    st.caption("Version 2.1")
     st.markdown(
         """
         Operations intelligence for field-sales and home-service teams.
@@ -468,6 +520,9 @@ st.markdown(
             Turn sales activity data into KPI visibility, rep performance insights, lead source analysis,
             coaching priorities, manager briefs, and meeting-ready action plans.
         </div>
+        <div class="hero-pills">
+            <span>Operations</span><span>RevOps</span><span>KPI Reporting</span><span>Manager Briefs</span><span>Streamlit</span>
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -479,28 +534,55 @@ st.markdown(
 
 st.markdown('<div class="section-title">Upload sales activity data</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="section-lede">Use the sample data to explore the dashboard, or upload a CSV using the required format.</div>',
+    '<div class="section-lede">Download the editable sample CSV, replace the fictional rows with your own activity data, then upload the edited file to generate the dashboard.</div>',
     unsafe_allow_html=True,
 )
 
-upload_col1, upload_col2 = st.columns([1, 2])
-with upload_col1:
+upload_info_col, upload_action_col = st.columns([2, 1])
+with upload_info_col:
+    st.markdown(
+        """
+        <div class="upload-card">
+            <h3>CSV format</h3>
+            <p>Your file must include these columns: <strong>Date, Rep, Lead Source, Leads Issued, Demos, Sales, Revenue</strong>.</p>
+            <p>The sample file uses fictional placeholder reps and lead sources so it can be safely edited for testing.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+with upload_action_col:
     st.download_button(
-        label="Download CSV Template",
-        data=SAMPLE_TEMPLATE,
-        file_name="opspilot-csv-template.csv",
+        label="Download Editable Sample CSV",
+        data=EDITABLE_SAMPLE_CSV,
+        file_name="opspilot-editable-sample.csv",
         mime="text/csv",
         use_container_width=True,
     )
-with upload_col2:
-    uploaded_file = st.file_uploader("Upload CSV", type=["csv"], label_visibility="collapsed")
+    uploaded_file = st.file_uploader("Upload Edited CSV", type=["csv"])
 
 raw_df = load_data(uploaded_file)
+
+# -----------------------------------------------------------------------------
+# Data readiness summary
+# -----------------------------------------------------------------------------
+
+st.markdown('<div class="section-title">Data readiness check</div>', unsafe_allow_html=True)
+ready_col1, ready_col2, ready_col3, ready_col4 = st.columns(4)
+with ready_col1:
+    kpi_card("Rows Loaded", f"{len(raw_df):,.0f}")
+with ready_col2:
+    kpi_card("Reps", f"{raw_df['Rep'].nunique():,.0f}")
+with ready_col3:
+    kpi_card("Lead Sources", f"{raw_df['Lead Source'].nunique():,.0f}")
+with ready_col4:
+    date_range_label = f"{raw_df['Date'].min().date()} to {raw_df['Date'].max().date()}"
+    kpi_card("Date Range", date_range_label)
 
 # -----------------------------------------------------------------------------
 # Filters
 # -----------------------------------------------------------------------------
 
+st.markdown('<div class="section-title">Filters</div>', unsafe_allow_html=True)
 filter_col1, filter_col2, filter_col3 = st.columns(3)
 
 with filter_col1:
@@ -607,12 +689,7 @@ health_items = [
 for index, (name, value, target, display_value, display_target) in enumerate(health_items):
     status, status_class, description = evaluate_metric(value, target, name)
     with [health_col1, health_col2][index % 2]:
-        risk_card(
-            name,
-            status,
-            status_class,
-            f"Current: {display_value}. Target: {display_target}. {description}",
-        )
+        risk_card(name, status, status_class, f"Current: {display_value}. Target: {display_target}. {description}")
 
 st.markdown('<div class="section-title">AI operations diagnosis</div>', unsafe_allow_html=True)
 
@@ -709,9 +786,9 @@ st.download_button(
 with st.expander("How to use OpsPilot AI"):
     st.markdown(
         """
-        1. Download the CSV template.
-        2. Replace the sample rows with sales activity data.
-        3. Upload the completed CSV file.
+        1. Download the editable sample CSV.
+        2. Replace the fictional sample rows with your own sales activity data.
+        3. Upload the edited CSV file.
         4. Adjust KPI targets in the sidebar.
         5. Review the KPI snapshot, operational health, AI diagnosis, manager brief, and meeting agenda.
         6. Download the manager report for coaching or meeting prep.
