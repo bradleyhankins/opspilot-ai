@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 
 import streamlit as st
 
@@ -33,6 +34,14 @@ def read_token() -> str | None:
 def stable_cache_key(prefix: str, value: object) -> str:
     digest = hashlib.sha256(str(value).encode("utf-8")).hexdigest()
     return f"{prefix}_{digest}"
+
+
+def normalize_cache_key(cache_key: str, prompt: str) -> str:
+    """Normalize old Python hash-style keys into deterministic cache keys."""
+    if re.search(r"_[\-]?\d+$", cache_key):
+        prefix = re.sub(r"_[\-]?\d+$", "", cache_key)
+        return stable_cache_key(prefix, prompt)
+    return cache_key
 
 
 def prepare_prompt(prompt: str) -> str:
@@ -68,7 +77,8 @@ def generate_ai_text(prompt: str, model: str = DEFAULT_MODEL) -> str | None:
 
 
 def enhance_text(prompt: str, fallback: str, cache_key: str) -> str:
-    if cache_key not in st.session_state:
+    safe_cache_key = normalize_cache_key(cache_key, prompt)
+    if safe_cache_key not in st.session_state:
         generated = generate_ai_text(prompt)
-        st.session_state[cache_key] = generated.strip() if generated else fallback
-    return st.session_state[cache_key]
+        st.session_state[safe_cache_key] = generated.strip() if generated else fallback
+    return st.session_state[safe_cache_key]
