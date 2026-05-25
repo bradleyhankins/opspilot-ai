@@ -6,16 +6,88 @@ OpsPilot AI is an AI-enhanced operations intelligence dashboard for field-sales 
 
 [Launch OpsPilot AI](https://opspilot-ai.streamlit.app/)
 
-## Current Version: v2.4
+## Current Version: v2.6
 
 OpsPilot AI combines a rules-based KPI engine with embedded AI-enhanced manager brief generation.
 
-The app is designed to work in two layers:
+The app works in two layers:
 
 1. **Rules-based core:** validates CSV data, calculates KPIs, compares targets, analyzes reps and lead sources, detects bottlenecks, and creates manager priorities.
-2. **Embedded AI layer:** when an OpenAI token is available, the app quietly enhances the Manager Brief with a more polished, manager-ready performance memo.
+2. **Embedded AI layer:** when an OpenAI token is available, the app improves the Manager Brief with a more polished, manager-ready performance memo.
 
-If the AI call fails or an API key is unavailable, the app silently falls back to the rules-based manager brief. The dashboard still works normally.
+If the AI call fails or an API key is unavailable, the app falls back to the rules-based manager brief. The dashboard still works normally.
+
+## Architecture
+
+OpsPilot has been refactored from a single-file Streamlit prototype into a modular application.
+
+```text
+opspilot-ai/
+├── app.py
+├── ai_helpers.py
+├── pdf_helpers.py
+├── requirements.txt
+├── core/
+│   ├── __init__.py
+│   ├── data_loader.py
+│   ├── diagnostics.py
+│   ├── formatters.py
+│   ├── metrics.py
+│   ├── prompts.py
+│   └── report_builder.py
+├── data/
+│   ├── __init__.py
+│   └── sample_data.py
+└── .github/
+    └── workflows/
+        └── python-checks.yml
+```
+
+### Module Responsibilities
+
+- `app.py` handles Streamlit layout, filters, rendering, and orchestration.
+- `core/data_loader.py` handles CSV parsing, required-column validation, upload size limits, row limits, numeric cleanup, negative value checks, and data quality warnings.
+- `core/metrics.py` contains KPI calculations, rep/source summaries, trends, period comparison, and formatted table helpers.
+- `core/diagnostics.py` contains operational health checks, bottleneck diagnosis, manager priorities, coaching notes, and best-manager-move logic.
+- `core/formatters.py` contains money, percent, direction, safe divide, and Markdown-to-HTML helpers.
+- `core/prompts.py` contains AI manager brief prompt construction.
+- `core/report_builder.py` builds the rules-based manager brief and downloadable manager report.
+- `data/sample_data.py` stores the editable sample CSV, required columns, and public-demo privacy note.
+- `ai_helpers.py` manages OpenAI access, guardrails, prompt length control, stable cache keys, and fallback behavior.
+- `pdf_helpers.py` converts structured report text into a downloadable PDF.
+
+## AI Design Pattern
+
+```text
+Rules decide. AI polishes. Guardrails constrain. Fallback protects.
+```
+
+The rules-based workflow remains the source of truth for:
+
+- KPI calculations
+- Target comparisons
+- Operational health status
+- Primary bottleneck
+- Rep/source performance summaries
+- Period comparison
+- Manager priorities
+- Downloadable report data
+
+The AI layer is used only to improve readability, structure, and usefulness of the manager brief.
+
+## Data Validation
+
+OpsPilot now includes stronger CSV validation:
+
+- Required-column validation
+- Upload size limit
+- Row count limit
+- Date parsing and cleanup
+- Revenue currency cleanup
+- Numeric conversion for leads, demos, sales, and revenue
+- Negative value rejection
+- Duplicate row warning
+- Logical warnings for demos greater than leads or sales greater than demos
 
 ## Why this project exists
 
@@ -54,21 +126,15 @@ Small and mid-sized businesses often rely on scattered spreadsheets, CRM exports
 - Top 3 manager priorities
 - Rep coaching cards
 - Weekly sales meeting agenda
-- Downloadable manager report
+- Downloadable PDF manager report
 - Downloadable filtered data CSV
 
 ## Export Strategy
 
-Current exports:
+Current user-facing exports:
 
-- Markdown manager report (`.md`) for GitHub-friendly and developer-friendly documentation
+- PDF manager report for manager/executive review
 - Filtered CSV export for continued analysis
-
-Planned next upgrade:
-
-- PDF manager report for a more user-friendly executive/manager deliverable
-
-The markdown export is useful for transparency and version control, but PDF is the better format for non-technical users.
 
 ## Required CSV Format
 
@@ -94,13 +160,21 @@ Example row:
 4. Review the executive scorecard, KPI snapshot, operational health grade, and trend comparison.
 5. Review rep performance and lead source performance.
 6. Review the embedded AI-enhanced Manager Brief.
-7. Download the manager report.
+7. Download the manager report PDF and filtered CSV.
+
+## Automated Checks
+
+This repo includes a GitHub Actions workflow that runs:
+
+```bash
+python -m compileall .
+```
+
+This catches syntax and import issues after modular refactors.
 
 ## Screenshots
 
-### Executive Scorecard and KPI Snapshot
-
-![OpsPilot AI Executive Scorecard](screenshots/executive-scorecard.svg)
+Screenshots will be refreshed after the final UI and PDF polish pass.
 
 ## Tech Stack
 
@@ -109,9 +183,14 @@ Example row:
 - Pandas
 - OpenAI API integration
 - Rules-based KPI and diagnostic logic
+- Modular app architecture
 - Silent AI fallback pattern
+- AI guardrails
 - CSV-based workflow
-- Markdown report export
+- CSV validation and cleanup
+- PDF report export
+- Filtered CSV export
+- GitHub Actions syntax checks
 - GitHub
 - Streamlit Community Cloud
 
